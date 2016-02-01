@@ -1,0 +1,3 @@
+\system\libs\model.class.php
+
+\system\config\param.inc.php 新增specify路由
