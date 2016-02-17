@@ -35,7 +35,8 @@ class autolottery extends SystemAction {
 		
 	//ajax 商品揭晓
 	public function autolottery_ret_install(){	
-	
+		error_reporting(E_ALL);
+		ini_set("display_errors", 1);
 	
 		if(!isset($_POST['shopid'])){
 			echo '-1';exit;
@@ -57,7 +58,7 @@ class autolottery extends SystemAction {
 			echo '-3';exit;
 		}			
 		if(!empty($shop_info['q_user_code']) && ($shop_info['q_showtime'] == 'Y')){				
-				echo '-6a';exit;
+				echo '-6';exit;
 		}			
 		if(!empty($shop_info['q_user_code']) && ($shop_info['q_showtime'] == 'N')){				
 			echo $shop_info['q_user_code']."sdfdsfsdfdsfsdf"; exit;
