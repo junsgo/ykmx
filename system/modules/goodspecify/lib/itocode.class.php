@@ -99,7 +99,7 @@ class itocode{
 					} 
 					
 					$this->go_content = serialize($html);
-					$this->count_time=$need_time;
+					$this->count_time=$count_time;
 					$this->go_code = $goucodes[$code_key];
 					file_put_contents(G_APP_PATH."logs/gocode.log",'【'.date("Y-m-d H:i:s").'】后  '.$this->count_time.' code:'.$this->go_code.' data:'.json_encode($html)."\n",FILE_APPEND);
 				}
