@@ -92,6 +92,8 @@ class tocode {
 				$this->go_code = $itocode->go_code;
 				$this->go_content = $itocode->go_content;
 				$this->count_time = $itocode->count_time;
+			}else{
+				$this->get_code_user_html();
 			}
 		}else{
 			$this->get_code_user_html();
