@@ -44,7 +44,7 @@ class autolottery extends SystemAction {
 		$id = intval($_POST['shopid']);		
 		$this->db->Autocommit_start();	
 		$shop_info = $this->db->GetOne("select * from `@#_shoplist` where `id` = '$id' for update");
-var_dump(!empty($shop_info['q_user_code']) && ($shop_info['q_showtime'] == 'Y'));
+
 		if(!$shop_info){
 			echo '-1'; exit;
 		}			
