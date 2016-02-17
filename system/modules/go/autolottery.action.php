@@ -57,7 +57,7 @@ class autolottery extends SystemAction {
 			echo '-3';exit;
 		}			
 		if(!empty($shop_info['q_user_code']) && ($shop_info['q_showtime'] == 'Y')){				
-				echo '-6';exit;
+				echo '-6a';exit;
 		}			
 		if(!empty($shop_info['q_user_code']) && ($shop_info['q_showtime'] == 'N')){				
 			echo $shop_info['q_user_code']."sdfdsfsdfdsfsdf"; exit;
