@@ -219,7 +219,7 @@ tr{ text-align:center}
 				</tr>
         </thead>
         <tbody> 			
-        	<?php foreach($shoplist as $v) { print_r($v);?>
+        	<?php print_r($shoplist);foreach($shoplist as $v) { print_r($v);?>
 
             <?php } ?>
         </tbody>
