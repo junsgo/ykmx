@@ -183,10 +183,6 @@ class content extends admin {
 			}
 			$shoplist[$k]['usernames'] = implode(",",$usernames);
 		}
-		print_r($shoplist);
-		foreach($shoplist as $v) {
-			echo $v['id']."\r\n";
-		}
 		include $this->tpl(ROUTE_M,'shop.lists');
 	}
 
