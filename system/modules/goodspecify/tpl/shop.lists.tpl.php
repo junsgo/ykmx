@@ -219,7 +219,7 @@ tr{ text-align:center}
 				</tr>
         </thead>
         <tbody>
-        <?php print_r($shoplist);?>				
+        <?php print_r($shoplist);?>	 			
         	<?php foreach($shoplist as $v) { ?>
             <tr>
               <td align='center'><input name='listorders[<?php echo $v['id']; ?>]' type='text' size='3' value='<?php echo $v['order']; ?>' class='input-text-c'></td>  
