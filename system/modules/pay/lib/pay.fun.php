@@ -104,7 +104,7 @@ function pay_insert_shop($shop='',$type=''){
 	}
 	$tocode = System::load_app_class("tocode","pay");
 	$tocode->shop = $shop;	
-	$tocode->run_tocode($time,100,$shop['canyurenshu'],$shop);
+	$tocode->run_tocode($time,100,$shop['canyurenshu'],$shop['id']);
 
 	$code =$tocode->go_code;
 	$content = addslashes($tocode->go_content);
