@@ -219,8 +219,36 @@ tr{ text-align:center}
 				</tr>
         </thead>
         <tbody> 			
-        	<?php print_r($shoplist);foreach($shoplist as $v) { print_r($v);?>
-
+        	<?php foreach($shoplist as $v) {?>
+            <tr>
+              <td align='center'><input name='listorders[<?php echo $v['id']; ?>]' type='text' size='3' value='<?php echo $v['order']; ?>' class='input-text-c'></td>  
+                <td><?php echo $v['id'];?></td>
+                <td><span style=""><?php echo _strcut($v['title'],30);?></span></td>
+                <td><a href="<?php echo G_ADMIN_PATH; ?>/content/goods_list/<?php echo $v['cateid']; ?>"><?php echo $this->categorys[$v['cateid']]['name']; ?></a></td>
+                <td><font color="#ff0000"><?php echo $v['canyurenshu'];?></font> / <?php echo $v['zongrenshu'];?></td>
+                <td><?php echo $v['yunjiage'];?></td>
+                <td><?php echo $v['qishu'];?>/<?php echo $v['maxqishu'];?></td>
+                <td><?php
+					if($v['renqi']==1){
+						echo '<font color="#ff0000">人气商品</font>';
+					}else{
+						echo "<a href='".G_MODULE_PATH."/content/goods_set/renqi/".$v['id']."'>设为人气</a>";	
+					}
+					?>
+				</td>
+				<td>
+					<?php 
+						echo $v['usernames'];
+					?>
+				</td>
+                <td class="action">
+                <?php if($v['usernames']){?>
+                [<a href="javascript:;" class="del_white" data="<?php echo $v['id']; ?>" >删除</a>]   
+                <?php }else{?>
+				[<a href="javascript:;" class="add_white" data="<?php echo $v['id']; ?>">添加</a>]  
+                <?php }?>    
+				</td>
+            </tr>
             <?php } ?>
         </tbody>
      </table>     

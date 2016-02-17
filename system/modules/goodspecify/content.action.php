@@ -183,6 +183,7 @@ class content extends admin {
 			}
 			$v['usernames'] = implode(",",$usernames);
 		}
+		print_r($shoplist);
 		include $this->tpl(ROUTE_M,'shop.lists');
 	}
 
