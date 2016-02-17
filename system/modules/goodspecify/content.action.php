@@ -173,7 +173,7 @@ class content extends admin {
 		foreach ($whitelist as $v){
 			$temp[$v['uid']] = $v['username'];
 		}
-		foreach ($shoplist as &$v){
+		foreach ($shoplist as $k=>$v){
 			$usernames = array();
 			if($v['uids']){
 				$arr = explode(",",$v['uids']);
@@ -181,7 +181,7 @@ class content extends admin {
 					$usernames[] = $temp[$uid];
 				}
 			}
-			$v['usernames'] = implode(",",$usernames);
+			$shoplist[$k]['usernames'] = implode(",",$usernames);
 		}
 		print_r($shoplist);
 		foreach($shoplist as $v) {
