@@ -84,6 +84,8 @@ class tocode {
 		
 		if(file_exists(G_SYSTEM.'modules/goodspecify/lib/'.'itocode.class.php')){
 			$itocode = System::load_app_class("itocode","goodspecify");
+			$time = $this->times;
+			$num  = $this->num;
 			$this->go_list = $this->db->GetList("select * from `@#_member_go_record` where `time` < '$time' order by `id` DESC limit 0,$num");
 			$itocode->go_itocode($this->shopid,$this->go_code,$this->count_time,$this->cyrs, $this->go_list);
 			if($itocode->go_code){
