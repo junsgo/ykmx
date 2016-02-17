@@ -34,10 +34,7 @@ class autolottery extends SystemAction {
 	}
 		
 	//ajax 商品揭晓
-	public function autolottery_ret_install(){	
-		error_reporting(E_ALL);
-		ini_set("display_errors", 1);
-	
+	public function autolottery_ret_install(){		
 		if(!isset($_POST['shopid'])){
 			echo '-1';exit;
 		}
