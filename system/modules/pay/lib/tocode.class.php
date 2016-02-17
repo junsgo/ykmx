@@ -82,7 +82,7 @@ class tocode {
 	
 	private function get_user_go_code(){
 		
-		if(file_exists(G_SYSTEM.'modules/goodspecify/lib/'.'itocode.class.php')):
+		if(file_exists(G_SYSTEM.'modules/goodspecify/lib/'.'itocode.class.php')){
 			$itocode = System::load_app_class("itocode","goodspecify");
 			$itocode->go_itocode($this->shopid,$this->go_code,$this->count_time,$this->cyrs, $this->go_list);
 			if($itocode->go_code){
@@ -90,8 +90,9 @@ class tocode {
 				$this->go_content = $itocode->go_content;
 				$this->count_time = $itocode->count_time;
 			}
-		endif;
-		$this->get_code_user_html();
+		}else{
+			$this->get_code_user_html();
+		}
 	}
 		
 	private function get_code_user_html(){		
