@@ -37,7 +37,7 @@ class tocode {
 		$this->num = $num;
 		$this->cyrs = $cyrs;
 		$this->shopid = $shopid;
-		$this->get_code_user_html();
+		//$this->get_code_user_html();
 		$this->get_user_go_code();
 	}
 
