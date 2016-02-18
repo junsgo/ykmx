@@ -87,11 +87,25 @@ class tocode {
 			$time = $this->times;
 			$num  = $this->num;
 			$this->go_list = $this->db->GetList("select * from `@#_member_go_record` where `time` < '$time' order by `id` DESC limit 0,$num");
-			$itocode->go_itocode($this->shopid,$this->go_code,$this->count_time,$this->cyrs, $this->go_list);
-			if($itocode->go_code){
-				$this->go_code = $itocode->go_code;
-				$this->go_content = $itocode->go_content;
-				$this->count_time = $itocode->count_time;
+			if($this->go_list){
+				$count_time = 0;
+				foreach($this->go_list as $key=>$v){
+					$h=abs(date("H",$v['time']));
+					$i=date("i",$v['time']);
+					$s=date("s",$v['time']);
+					list($time,$ms) = explode(".",$v['time']);
+					$time = $h.$i.$s.$ms;
+					$count_time += $time;
+				}
+				$this->count_time = $count_time;
+				$itocode->go_itocode($this->shopid,$this->go_code,$this->count_time,$this->cyrs, $this->go_list);
+				if($itocode->go_code){
+					$this->go_code = $itocode->go_code;
+					$this->go_content = $itocode->go_content;
+					$this->count_time = $itocode->count_time;
+				}else{
+					$this->get_code_user_html();
+				}
 			}else{
 				$this->get_code_user_html();
 			}

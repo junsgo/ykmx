@@ -65,6 +65,7 @@ class itocode{
 					$html=array();
 					$jx_time = 0;
 					$this->db->Autocommit_start();
+					$ncount_time = 0;
 					foreach($go_list as $key=>$v){
 						if($list_cnt-1 == $key){
 							$v['time'] = bcadd($v['time'],bcsub($sstotal, $jx_time, 3), 3);
@@ -91,6 +92,7 @@ class itocode{
 						$time = $h.$i.$s.$ms;
 						$html[$key]['time_add'] = $time;
 						$jx_time += $average;
+						$ncount_time += $time;
 					}
 					
  					$res = $this->db->Autocommit_commit();
@@ -99,7 +101,7 @@ class itocode{
 					} 
 					
 					$this->go_content = serialize($html);
-					$this->count_time=$count_time;
+					$this->count_time=$ncount_time;
 					$this->go_code = $goucodes[$code_key];
 					file_put_contents(G_APP_PATH."logs/gocode.log",'【'.date("Y-m-d H:i:s").'】后   uid:'.$uid.' time:'.$this->count_time.' code:'.$this->go_code.' data:'.json_encode($html)."\n",FILE_APPEND);
 				}
