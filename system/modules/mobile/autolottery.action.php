@@ -100,6 +100,7 @@ class autolottery extends SystemAction {
 				exit;
 			}
 			$tocode = System::load_app_class("tocode","pay");
+			$tocode->shop = $shop_info;
 			$tocode->run_tocode($shop_info['xsjx_time'],100,$shop_info['canyurenshu']);
 			$code =$tocode->go_code;
 					

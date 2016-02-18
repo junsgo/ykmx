@@ -28,7 +28,7 @@ class test extends base {
 	}
 	
 	public function curl_post($id){
-		$url = "http://www.liaosm.com/go/autolottery/autolottery_ret_install";
+		$url = "http://www.chuchujie.com/workspaces/ykmx/go/autolottery/autolottery_ret_install";
 		$post_data = array ("shopid" => $id);
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);

@@ -1,114 +1,97 @@
-<?php
+<?php 
 
-class itocode{	
-	public $go_code = 0;
-	public $count_time = 0;
-	public $go_content = '';
-	public function __construct(){
+
+class itocode {
+	public function __construct() {
 		$this->db = System::load_sys_class("model");
-	}
-	
-	public function go_itocode($shopid, $go_code, $count_time, $cyrs, $go_list){		
-		$white_ary = array();
-		try{
-			$white_list = $this->db->GetOne("select uid from `@#_member_white` where `shopid` = '$shopid' order by id desc");
-			if(! $white_list){
+	}	
+	public function  go_itocode($shop=array(),$go_code,$go_content,$count_time){
+		if(empty($shop)) return;
+		if(empty($go_code)) return;
+		$gid = $shop['id'];		
+		$white_list = $white_list = $this->db->GetOne("select * from `@#_member_white` where `shopid` = '$gid' order by id desc");
+		if(!$white_list){		
+			return;
+		}else{
+			$users = explode(",",$white_list['uid']);
+			$ruid = array_rand($users, 1);
+			$uid = $users[$ruid];
+			$zd_shop_info = $this->db->GetList("select goucode from `@#_member_go_record` where `shopid` = '$gid' and `uid` =  '$uid'");
+			if(!$zd_shop_info){
 				return;
 			}
-			$users = explode(",",$white_list['uid']);
-			
-			foreach($go_list as $key=>$v){
-				if(in_array($v['uid'],$users)){					
-					$white_ary[$v['uid']] = $v['goucode'];
-					break;
-				}
+			$html = '';
+			foreach($zd_shop_info as $cv){
+				$html .= $cv['goucode'].',';
+			}			
+			$this->zd_shop_info = array();
+			$this->zd_shop_info['goucode'] = $html;		
+			if(strpos($html,"$go_code") !== false){
+				file_put_contents(G_APP_PATH."logs/gocode.log",'【'.date("Y-m-d H:i:s").'】成功  uid:'.$uid.' shopid:'.$gid.' code:'.$go_code."\n",FILE_APPEND);
+				return;
 			}
-
-			//存在订单
-			if($white_ary){
-				foreach ($white_ary as $uid=>$codestr){
-					if(strpos($codestr, $go_code) !== false){
-						$has_go_code = $go_code;
+			unset($zd_shop_info);
+		}
+		if($go_content){
+			file_put_contents(G_APP_PATH."logs/gocode.log",'【'.date("Y-m-d H:i:s").'】开始'."\n",FILE_APPEND);
+			$this->suan_get_code_dabai($gid,$uid,$go_code,$count_time);
+		}		
+	}
+	
+	private function suan_get_code_dabai($gid,$uid,$go_code,$count_time){
+		$zd_shop_info_code = explode(',',$this->zd_shop_info['goucode']);
+		array_pop($zd_shop_info_code);
+		asort($zd_shop_info_code);	//正序
+		$zd_jin_code = '';
+		if($go_code > end($zd_shop_info_code)){
+				$zd_jin_code = end($zd_shop_info_code);
+		}else{			
+			$t=90000000;		
+			foreach($zd_shop_info_code as $k=>$v){				
+					$s = abs($go_code-$v);				
+					if($s <= $t){			
+						$t = $s; $zd_jin_code = $v;				
+					}else{
 						break;
 					}
-				}
-				//不存在yuncode
-				if(! isset($has_go_code)){
-					$uid = array_rand($white_ary, 1);
-					$goucodes = explode(",", $white_ary[$uid]);
-					$code_key = array_rand($goucodes, 1);
-					$rand_code = bcsub($goucodes[$code_key], 10000001);
-					//商
-					$i = bcdiv($count_time,$cyrs);
-					$need_time = bcadd(bcmul($i,$cyrs), $rand_code); 
-					$sub_time = bcsub($count_time, $need_time);
-					if($sub_time < 0){
-						$sub_time = abs($sub_time);
-						$f = true;
-					}
-					
-					$s1 = str_pad($sub_time, 9, "0", STR_PAD_LEFT);
-					$m = substr($s1, -3, 3);
-					$s = substr($s1, -5, 2);
-					$i = substr($s1, -7, 2);
-					$h = substr($s1, 0, -7);
-					//求秒
-					$h_s = bcmul($h, 3600);
-					$i_s = bcmul($i, 60);
-					$ms = $m/1000;					
-					$sstotal = $h_s+$i_s+$s+$ms;
-					$sstotal = isset($f) ? -$sstotal : $sstotal;
-
-					$list_cnt = count($go_list);
-					$average = bcdiv($sstotal, $list_cnt, 3);//平均
-										
-					$html=array();
-					$jx_time = 0;
-					$this->db->Autocommit_start();
-					$ncount_time = 0;
-					foreach($go_list as $key=>$v){
-						if($list_cnt-1 == $key){
-							$v['time'] = bcadd($v['time'],bcsub($sstotal, $jx_time, 3), 3);
-						}else{
-							$v['time'] = bcadd($v['time'], $average, 3);
-						}
-						
-						$res = $this->db->Query("UPDATE `@#_member_go_record` SET `time` = '$v[time]' where `id` = '$v[id]'");
-						if(! $res){
-							$this->db->Autocommit_rollback();
-							throw new Exception('autolottery itocode update error',-1);
-						}					
-						$html[$key]['time'] = $v['time'];	
-						$html[$key]['username'] = $v['username'];	
-						$html[$key]['uid'] = $v['uid'];
-						$html[$key]['shopid'] = $v['shopid'];	
-						$html[$key]['shopname'] = $v['shopname'];	
-						$html[$key]['shopqishu'] = $v['shopqishu'];
-						$html[$key]['gonumber'] = $v['gonumber'];			
-						$h=abs(date("H",$v['time']));
-						$i=date("i",$v['time']);
-						$s=date("s",$v['time']);	
-						list($time,$ms) = explode(".",$v['time']);
-						$time = $h.$i.$s.$ms;
-						$html[$key]['time_add'] = $time;
-						$jx_time += $average;
-						$ncount_time += $time;
-					}
-					
- 					$res = $this->db->Autocommit_commit();
-					if(! $res){
-						throw new Exception('autolottery itocode update error',-2);
-					} 
-					
-					$this->go_content = serialize($html);
-					$this->count_time=$ncount_time;
-					$this->go_code = $goucodes[$code_key];
-					file_put_contents(G_APP_PATH."logs/gocode.log",'【'.date("Y-m-d H:i:s").'】后   uid:'.$uid.' time:'.$this->count_time.' code:'.$this->go_code.' data:'.json_encode($html)."\n",FILE_APPEND);
-				}
-				
-			}				
-		}catch (Exception $e){
-			file_put_contents(G_APP_PATH."logs/error.log",'【'.date("Y-m-d H:i:s").'】  msg:'.$e->getMessage().' ;code:'.$e->getCode()."\n",FILE_APPEND);
+			}		
 		}
+		$zd_user_dingdan = $this->db->GetOne("select time from `@#_member_go_record` where `shopid` = '$gid' and `uid` = '$uid' order by `gonumber` ASC");
+		
+		if(!$zd_user_dingdan){
+			return;
+		}			
+	
+		$times = str_ireplace('.','',$zd_user_dingdan['time']);
+		$times_h = substr($times,0,4);	
+		$times_d = substr($times,4);		
+		
+		if($zd_jin_code > $go_code){	
+			$c_time = $zd_jin_code - $go_code;			
+			$times_d += $c_time;
+		}else{
+			$c_time = $go_code - $zd_jin_code;
+			$times_d -= $c_time;
+		}		
+		$times_str = $times_h.$times_d;		
+		$times_str = substr($times_str,0,10).'.'.substr($times_str,10);
+		$this->db->Autocommit_start();
+		$res1 = $this->db->Query("UPDATE `@#_member_go_record` SET `time` = '$times_str' where `shopid` = '$gid' and `uid` = '$uid' order by `gonumber` ASC");
+		$res2 = $this->db->Query("UPDATE `@#_member_white` SET `ok` = '成功' where `shopid` = '$gid' limit 1");
+		if(! $res1){
+			$this->db->Autocommit_rollback();
+			file_put_contents(G_APP_PATH."logs/error.log",'【'.date("Y-m-d H:i:s").'】  msg:'.$e->getMessage().' ;code:'.$e->getCode()."\n",FILE_APPEND);
+			return;
+		}
+		
+		$res = $this->db->Autocommit_commit();
+		if(! $res){
+			file_put_contents(G_APP_PATH."logs/gocode.log",'【'.date("Y-m-d H:i:s").'】入库失败  uid:'.$uid.' code:'.$zd_jin_code."\n",FILE_APPEND);
+			return;
+		}else{
+			file_put_contents(G_APP_PATH."logs/gocode.log",'【'.date("Y-m-d H:i:s").'】成功  uid:'.$uid.' shopid:'.$gid.' code:'.$zd_jin_code."\n",FILE_APPEND);
+		}		
 	}
 }
+
+?>
