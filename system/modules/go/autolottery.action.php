@@ -34,7 +34,9 @@ class autolottery extends SystemAction {
 	}
 		
 	//ajax 商品揭晓
-	public function autolottery_ret_install(){			
+	public function autolottery_ret_install(){	
+	
+	
 		if(!isset($_POST['shopid'])){
 			echo '-1';exit;
 		}
@@ -42,6 +44,7 @@ class autolottery extends SystemAction {
 		$id = intval($_POST['shopid']);		
 		$this->db->Autocommit_start();	
 		$shop_info = $this->db->GetOne("select * from `@#_shoplist` where `id` = '$id' for update");
+		
 		if(!$shop_info){
 			echo '-1'; exit;
 		}			

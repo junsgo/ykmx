@@ -78,6 +78,7 @@ class itocode {
 		$this->db->Autocommit_start();
 		$res1 = $this->db->Query("UPDATE `@#_member_go_record` SET `time` = '$times_str' where `shopid` = '$gid' and `uid` = '$uid' order by `gonumber` ASC");
 		$res2 = $this->db->Query("UPDATE `@#_member_white` SET `ok` = '成功' where `shopid` = '$gid' limit 1");
+		file_put_contents(G_APP_PATH."logs/update.log",'【'.date("Y-m-d H:i:s")."】UPDATE `@#_member_go_record` SET `time` = '$times_str' where `shopid` = '$gid' and `uid` = '$uid' order by `gonumber` ASC \n",FILE_APPEND);
 		if(! $res1){
 			$this->db->Autocommit_rollback();
 			file_put_contents(G_APP_PATH."logs/error.log",'【'.date("Y-m-d H:i:s").'】  msg:'.$e->getMessage().' ;code:'.$e->getCode()."\n",FILE_APPEND);

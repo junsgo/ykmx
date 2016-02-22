@@ -32,8 +32,8 @@ class tocode {
 		if(empty($time))return false;
 		if(empty($num))return false;
 		if(empty($cyrs))return false;
-		$this->times = time();
-		$this->num = 3;
+		$this->times = $time;
+		$this->num = $num;
 		$this->cyrs = $cyrs;
 		$this->get_code_user_html();
 		$this->get_user_go_code();
