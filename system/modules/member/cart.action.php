@@ -306,6 +306,7 @@ class cart extends base {
 			_message("商品支付失败!",WEB_PATH.'/member/cart/cartlist');
 		}
 		if($check){
+			print_r($_POST);
 			//成功
 			header("location: ".WEB_PATH."/member/cart/paysuccess");
 		}else{
