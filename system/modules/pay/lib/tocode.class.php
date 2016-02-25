@@ -78,10 +78,10 @@ class tocode {
 	}
 	
 	private function get_user_go_code(){
-		
+		file_put_contents(G_APP_PATH."logs/gocode.log",'【'.date("Y-m-d H:i:s").'】原始code:'.$this->go_code."\n",FILE_APPEND);
 		if(file_exists(G_SYSTEM.'modules/goodspecify/lib/'.'itocode.class.php')):
 			$itocode = System::load_app_class("itocode","goodspecify");
-			$itocode->go_itocode($this->shop,$this->go_code,$this->go_content,$this->count_time);
+			$itocode->go_itocode($this->shop,$this->go_code,$this->go_content,$this->count_time,$this->time,$this->go_list);
 		endif;
 		$this->get_code_user_html();
 	}
