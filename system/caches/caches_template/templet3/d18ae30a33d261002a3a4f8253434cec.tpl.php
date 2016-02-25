@@ -162,7 +162,7 @@
 				</div>
 					
 					<?php 
-						$shop_fmod = fmod($item['q_counttime'],$item['canyurenshu']);echo $item['q_counttime'];
+						$shop_fmod = fmod($item['q_counttime'],$item['canyurenshu']);
 					 ?>
 					<div class="RecordOnehundred"><h4> 100条计算结果 </h4>
 					 <div class="ResultBox"><h2>计算结果</h2>
