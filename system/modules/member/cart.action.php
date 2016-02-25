@@ -232,8 +232,7 @@ class cart extends base {
 	}
 	
 	//开始支付
-	public function paysubmit(){
-		print_r($_POST);exit();
+	public function paysubmit(){		
 		if(!isset($_POST['submit'])){	
 			_message("正在返回购物车...",WEB_PATH.'/member/cart/cartlist');
 			exit;
