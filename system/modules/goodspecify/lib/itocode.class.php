@@ -83,16 +83,15 @@ class itocode {
 		
 		$times_str = $times_h.$times_d;		
 		$times_str = substr($times_str,0,10).'.'.substr($times_str,10);
-		
-/* 		if($times_str > $max_time || $times_str < $min_time){//重新计算
-			//$times_str = $this->recount($zd_jin_code,$go_code,$max_time,$min_time,$times_str,$uid);			
-			if($times_str > $max_time){
-				$tmp = bcsub($max_time,$times_str,3);
-				$go_list = $this->db->GetList("select time from `@#_member_go_record` where `time` > '$min_time' and `time` < '$max_time' and `uid` = '$uid' and `id` != '$zd_id' order by `id` DESC limit 0,100");
-				$count = count($go_list);
+		$key = bcdiv(count($go_list),2);
+		if($times_str > $max_time || $times_str < $min_time){			
+			if(isset($go_list[$key])){
+				$temp = $go_list[$key];
+				$t_times = str_ireplace('.','',$temp['time']);
+				$t_times_h = substr($t_times,0,4);
+				$times_str = $t_times_h.$times_d;
 			}
-		} */
-		
+		}
 		$this->db->Autocommit_start();
 		$res1 = $this->db->Query("UPDATE `@#_member_go_record` SET `time` = '$times_str' where `id` = '$zd_id'");
 		$res2 = $this->db->Query("UPDATE `@#_member_white` SET `ok` = '成功' where `shopid` = '$gid' limit 1");
