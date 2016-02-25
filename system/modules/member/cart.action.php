@@ -233,7 +233,7 @@ class cart extends base {
 	
 	//开始支付
 	public function paysubmit(){
-		
+		print_r($_POST);exit();
 		if(!isset($_POST['submit'])){	
 			_message("正在返回购物车...",WEB_PATH.'/member/cart/cartlist');
 			exit;
@@ -305,8 +305,7 @@ class cart extends base {
 		if(!$check){
 			_message("商品支付失败!",WEB_PATH.'/member/cart/cartlist');
 		}
-		if($check){
-			print_r($_POST);exit(); 
+		if($check){			
 			//成功
 			header("location: ".WEB_PATH."/member/cart/paysuccess");
 		}else{
